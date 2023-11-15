@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:expense_app/data/expenses_data.dart';
 import 'package:expense_app/models/expense_model.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // for date formatting
+import 'package:intl/intl.dart'; 
 
 class NewExpense extends StatefulWidget {
   const NewExpense({super.key});
@@ -17,18 +17,18 @@ class _NewExpenseState extends State<NewExpense> {
   final _expensePriceController = TextEditingController();
   ExpensesData expensesData = ExpensesData();
   DateTime _selectedDate =
-      DateTime.now(); // initialize selected date to current date
+      DateTime.now(); 
 
   void _selectDate() async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
       firstDate: DateTime.now().subtract(
-          const Duration(days: 365)), // restrict dates to last year and beyond
-      lastDate: DateTime.now(), // only allow dates up to today
+          const Duration(days: 365)), 
+      lastDate: DateTime.now(), 
       selectableDayPredicate: (DateTime day) {
         return day.isBefore(DateTime.now()
-            .add(const Duration(days: 1))); // only allow dates before tomorrow
+            .add(const Duration(days: 1))); 
       },
     );
     if (pickedDate != null && pickedDate != _selectedDate) {
