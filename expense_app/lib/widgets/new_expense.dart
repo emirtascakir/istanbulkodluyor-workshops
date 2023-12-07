@@ -1,12 +1,10 @@
-import 'dart:developer';
-
-import 'package:expense_app/data/expenses_data.dart';
 import 'package:expense_app/models/expense_model.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; 
+import 'package:intl/intl.dart'; // for date formatting
 
 class NewExpense extends StatefulWidget {
-  const NewExpense({super.key});
+  final void Function(Expense expense) onAdd;
+  const NewExpense(this.onAdd, {super.key});
 
   @override
   State<NewExpense> createState() => _NewExpenseState();
@@ -15,20 +13,20 @@ class NewExpense extends StatefulWidget {
 class _NewExpenseState extends State<NewExpense> {
   final _expenseNameController = TextEditingController();
   final _expensePriceController = TextEditingController();
-  ExpensesData expensesData = ExpensesData();
+  Category _selectedCategory = Category.work;
   DateTime _selectedDate =
-      DateTime.now(); 
+      DateTime.now(); // initialize selected date to current date
 
   void _selectDate() async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
       firstDate: DateTime.now().subtract(
-          const Duration(days: 365)), 
-      lastDate: DateTime.now(), 
+          const Duration(days: 365)), // restrict dates to last year and beyond
+      lastDate: DateTime.now(), // only allow dates up to today
       selectableDayPredicate: (DateTime day) {
         return day.isBefore(DateTime.now()
-            .add(const Duration(days: 1))); 
+            .add(const Duration(days: 1))); // only allow dates before tomorrow
       },
     );
     if (pickedDate != null && pickedDate != _selectedDate) {
@@ -69,14 +67,14 @@ class _NewExpenseState extends State<NewExpense> {
                 ),
                 TextButton(
                   onPressed: () {
-                    expensesData.expenses.add(Expense(
-                        name: _expenseNameController.text,
-                        price: double.parse(_expensePriceController.text),
-                        date: _selectedDate));
-                    inspect(expensesData.expenses.last);
-                    setState(() {
-                      Navigator.of(context).pop();
-                    });
+                    Expense newExpense = Expense(
+                      name: _expenseNameController.text,
+                      price: double.parse(_expensePriceController.text),
+                      date: _selectedDate,
+                      category: _selectedCategory,
+                    );
+                    widget.onAdd(newExpense);
+                    Navigator.pop(context);
                   },
                   child: const Text(
                     "Ekle",
@@ -98,19 +96,37 @@ class _NewExpenseState extends State<NewExpense> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 13),
               child: TextField(
+                keyboardType: TextInputType.number,
                 controller: _expensePriceController,
                 decoration: const InputDecoration(
                   labelText: "Harcamanızın Tutarı",
                 ),
               ),
             ),
-            ElevatedButton(
-              onPressed: _selectDate,
-              child: Text(
-                "Tarih Seçin: " +
-                    DateFormat('yyyy-MM-dd').format(_selectedDate),
-                style: const TextStyle(color: Color.fromARGB(255, 66, 66, 66)),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: _selectDate,
+                  child: Text(
+                    "Tarih Seçin: " +
+                        DateFormat('yyyy-MM-dd').format(_selectedDate),
+                    style:
+                        const TextStyle(color: Color.fromARGB(255, 66, 66, 66)),
+                  ),
+                ),
+                DropdownButton(
+                    value: _selectedCategory,
+                    items: Category.values.map((category) {
+                      return DropdownMenuItem(
+                          value: category, child: Text(category.name));
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        if (value != null) _selectedCategory = value;
+                      });
+                    })
+              ],
             )
           ],
         ),
