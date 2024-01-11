@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "593099494761",
+    "project_id": "emir-s-firebase-example",
+    "storage_bucket": "emir-s-firebase-example.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:593099494761:android:bb27fda7ef5a27d56d19f8",
+        "android_client_info": {
+          "package_name": "com.example.firebase_example"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfWH2w5dGTOrFULIqJ_j5FZWqw00Vr30U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
