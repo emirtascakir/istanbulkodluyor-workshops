@@ -32,6 +32,10 @@ class _HomeState extends State<Home> {
     }
   }
 
+
+    await firea
+  }
+
   File? _selectedImage;
 
   void _pickImage() async {
